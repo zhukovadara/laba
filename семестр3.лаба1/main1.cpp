@@ -7,15 +7,15 @@ int main() {
 
     cout << "Программа учета заболеваний сотрудников\n";
 
-    int N = safeInputInt("Введите количество сотрудников (1-100): ", 1, 100);
+    int N = checkInt("Введите количество сотрудников (1-100): ", 1, 100);
 
     vector<Employee> employees;
     
     inputEmployees(employees, N);
 
-    printAllEmployees(employees);
+    printEmployees(employees);
 
-    printEmployeesWithSameDisease(employees);
+    printEmployeesDisease(employees);
 
     cout << "\nПрограмма завершена.\n";
 

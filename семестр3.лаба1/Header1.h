@@ -11,26 +11,26 @@
 using namespace std;
 
 struct Employee {
-    string fullName;
-    int birthYear;
+    string fio;
+    int year;
     string disease;
-    int sicknessDuration;
+    int days;
 };
 
 bool check(const string& str);
 
 bool checkS(const string& str);
 
-int safeInputInt(const string& prompt, int minValue, int maxValue);
+int checkInt(const string& prompt, int minValue, int maxValue);
 
-string safeInputString(const string& prompt, bool allowEmpty = false, bool checkLetters = false);
+string checkString(const string& prompt, bool allowEmpty = false, bool checkLetters = false);
 
 void inputEmployees(vector<Employee>& employees, int N);
 
-void printEmployeesWithSameDisease(const vector<Employee>& employees);
+void printEmployeesDisease(const vector<Employee>& employees);
 
-void printAllEmployees(const vector<Employee>& employees);
+void printEmployees(const vector<Employee>& employees);
 
-void clearInputBuffer();
+void clear();
 
 #endif

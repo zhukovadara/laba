@@ -2,7 +2,7 @@
 
 using namespace std;
 
-void clearInputBuffer() {
+void clear() {
     cin.clear();
     cin.ignore(numeric_limits<streamsize>::max(), '\n');
 }
@@ -25,7 +25,7 @@ bool checkS(const string& str) {
     return true;
 }
 
-int safeInputInt(const string& prompt, int minValue, int maxValue) {
+int checkInt(const string& prompt, int minValue, int maxValue) {
     string input;
     int value;
     bool valid = false;
@@ -69,7 +69,7 @@ int safeInputInt(const string& prompt, int minValue, int maxValue) {
     return value;
 }
 
-string safeInputString(const string& prompt, bool allowEmpty, bool checkLetters) {
+string checkString(const string& prompt, bool allowEmpty, bool checkLetters) {
     string input;
     bool valid = false;
 
@@ -112,19 +112,19 @@ void inputEmployees(vector<Employee>& employees, int N) {
         Employee emp;
         cout << "\nСотрудник " << i + 1 << "\n";
 
-        emp.fullName = safeInputString("Введите ФИО: ", false, true);
+        emp.fio = checkString("Введите ФИО: ", false, true);
 
-        emp.birthYear = safeInputInt("Введите год рождения (1900-2026): ", 1900, 2026);
+        emp.year = checkInt("Введите год рождения (1900-2026): ", 1900, 2026);
 
-        emp.disease = safeInputString("Введите заболевание: ", false, true);
+        emp.disease = checkString("Введите заболевание: ", false, true);
 
-        emp.sicknessDuration = safeInputInt("Введите продолжительность болезни (в днях, 1-365): ", 1, 365);
+        emp.days = checkInt("Введите продолжительность болезни (в днях, 1-365): ", 1, 365);
 
         employees.push_back(emp);
     }
 }
 
-void printEmployeesWithSameDisease(const vector<Employee>& employees) {
+void printEmployeesDisease(const vector<Employee>& employees) {
     map<string, vector<Employee>> diseaseGroups;
 
     for (const auto& emp : employees) {
@@ -139,9 +139,9 @@ void printEmployeesWithSameDisease(const vector<Employee>& employees) {
             found = true;
             cout << "\nЗаболевание: " << group.first << "\n";
             for (const auto& emp : group.second) {
-                cout << "ФИО: " << emp.fullName << "\n";
-                cout << "Год рождения: " << emp.birthYear << "\n";
-                cout << "Продолжительность: " << emp.sicknessDuration << " дней\n";
+                cout << "ФИО: " << emp.fio << "\n";
+                cout << "Год рождения: " << emp.year << "\n";
+                cout << "Продолжительность: " << emp.days << " дней\n";
                 cout << "\n";
             }
         }
@@ -152,13 +152,13 @@ void printEmployeesWithSameDisease(const vector<Employee>& employees) {
     }
 }
 
-void printAllEmployees(const vector<Employee>& employees) {
+void printEmployees(const vector<Employee>& employees) {
     cout << "\nСписок всех сотрудников:\n";
     for (size_t i = 0; i < employees.size(); i++) {
         cout << "\nСотрудник " << i + 1 << ":\n";
-        cout << "ФИО: " << employees[i].fullName << "\n";
-        cout << "Год рождения: " << employees[i].birthYear << "\n";
+        cout << "ФИО: " << employees[i].fio << "\n";
+        cout << "Год рождения: " << employees[i].year << "\n";
         cout << "Заболевание: " << employees[i].disease << "\n";
-        cout << "Продолжительность: " << employees[i].sicknessDuration << " дней\n";
+        cout << "Продолжительность: " << employees[i].days << " дней\n";
     }
 }
