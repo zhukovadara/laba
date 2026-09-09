@@ -11,10 +11,10 @@ int main() {
     int n = getN("Введите размер массива: ");
 
     vector<int> arr;
-    generateArray(arr, n);
+    generateArr(arr, n);
 
     cout << "\nМассив: ";
-    printArray(arr);
+    printArr(arr);
 
     int maxVal = findMax(arr, 0, n - 1);
 

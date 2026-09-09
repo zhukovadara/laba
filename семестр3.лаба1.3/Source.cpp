@@ -2,7 +2,7 @@
 
 using namespace std;
 
-void generateArray(vector<int>& arr, int size) {
+void generateArr(vector<int>& arr, int size) {
     srand(time(0));
     arr.resize(size);
     for (int i = 0; i < size; i++) {
@@ -10,7 +10,7 @@ void generateArray(vector<int>& arr, int size) {
     }
 }
 
-void printArray(const vector<int>& arr) {
+void printArr(const vector<int>& arr) {
     cout << "[";
     for (size_t i = 0; i < arr.size(); i++) {
         cout << arr[i];

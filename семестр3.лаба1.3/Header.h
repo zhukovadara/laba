@@ -10,9 +10,9 @@
 
 using namespace std;
 
-void generateArray(vector<int>& arr, int size);
+void generateArr(vector<int>& arr, int size);
 
-void printArray(const vector<int>& arr);
+void printArr(const vector<int>& arr);
 
 int findMax(const vector<int>& arr, int left, int right);
 
