@@ -1,169 +1,189 @@
 #include "Patient.h"
 
-using namespace std;
-
-Patient::Patient() {
-    date = "";
-    fio = "";
-    group = "";
-    reason = "";
-    wasSentToHospital = false;
-    note = "";
+Patient::Patient()
+    : date("01.01.2000"), fullName("Неизвестно"), group("Не указана"),
+    reason("Не указана"), helped(true), note("") {
 }
 
-Patient::Patient(const string& date, const string& fio, const string& group,
-    const string& reason, bool wasSentToHospital, const string& note) {
-    this->date = date;
-    this->fio = fio;
-    this->group = group;
-    this->reason = reason;
-    this->wasSentToHospital = wasSentToHospital;
-    this->note = note;
+Patient::Patient(const string& date, const string& fullName,
+    const string& group, const string& reason,
+    bool helped, const string& note)
+    : date(date), fullName(fullName), group(group),
+    reason(reason), helped(helped), note(note) {
 }
 
-string Patient::getDate() const { return date; }
-string Patient::getFullName() const { return fio; }
-string Patient::getGroup() const { return group; }
-string Patient::getReason() const { return reason; }
-bool Patient::wasSent() const { return wasSentToHospital; }
-string Patient::getNote() const { return note; }
-
-void Patient::setDate(const string& date) { this->date = date; }
-void Patient::setFullName(const string& fullName) { this->fio = fio; }
-void Patient::setGroup(const string& group) { this->group = group; }
-void Patient::setReason(const string& reason) { this->reason = reason; }
-void Patient::setWasSentToHospital(bool value) { wasSentToHospital = value; }
-void Patient::setNote(const string& note) { this->note = note; }
-
-void Patient::print() const {
-    cout << "Дата:           " << date << "\n";
-    cout << "ФИО:            " << fio << "\n";
-    cout << "Группа:         " << group << "\n";
-    cout << "Причина:        " << reason << "\n";
-    cout << "Результат:      "
-        << (wasSentToHospital ? "Направлен в другое учреждение"
-            : "Оказана помощь на месте") << "\n";
-    cout << "Примечание:     " << (note.empty() ? "-" : note) << "\n";
+Patient::Patient(const string& date, const string& fullName)
+    : date(date), fullName(fullName), group("Не указана"),
+    reason("Не указана"), helped(true), note("") {
 }
 
-string getString(const string& prompt) {
-    string value;
-    bool valid;
+Patient::Patient(const Patient& other)
+    : date(other.date), fullName(other.fullName), group(other.group),
+    reason(other.reason), helped(other.helped), note(other.note) {
+}
 
-    do {
+Patient::~Patient() {}
+
+string Patient::getDate()     const { return date; }
+string Patient::getFullName() const { return fullName; }
+string Patient::getGroup()    const { return group; }
+string Patient::getReason()   const { return reason; }
+bool   Patient::isHelped()    const { return helped; }
+string Patient::getNote()     const { return note; }
+
+void Patient::setDate(const string& d) { date = d; }
+void Patient::setFullName(const string& f) { fullName = f; }
+void Patient::setGroup(const string& g) { group = g; }
+void Patient::setReason(const string& r) { reason = r; }
+void Patient::setHelped(bool h) { helped = h; }
+void Patient::setNote(const string& n) { note = n; }
+
+bool Patient::isRedirected() const {
+    return !helped;
+}
+
+bool Patient::matchesDate(const string& d) const {
+    return date == d;
+}
+
+string Patient::toString() const {
+    return date + " | " + fullName + " | " + group + " | " + reason +
+        " | " + (helped ? "Помощь оказана" : "Направлен") + " | " + note;
+}
+
+void Patient::print(ostream& os) const {
+    os << left
+        << setw(12) << date
+        << setw(25) << fullName
+        << setw(18) << group
+        << setw(25) << reason
+        << setw(20) << (helped ? "Помощь оказана" : "Направлен")
+        << note << endl;
+}
+
+ostream& operator<<(ostream& os, const Patient& p) {
+    p.print(os);
+    return os;
+}
+
+istream& operator>>(istream& is, Patient& p) {
+    cout << "Дата (дд.мм.гггг): ";  is >> p.date;
+    cout << "Ф.И.О.: ";             is >> ws; getline(is, p.fullName);
+    cout << "Группа: ";             getline(is, p.group);
+    cout << "Причина: ";            getline(is, p.reason);
+    cout << "Помощь оказана (1-да, 0-нет): ";
+    is >> p.helped;
+    cout << "Примечание: ";         is >> ws; getline(is, p.note);
+    return is;
+}
+
+int inputInt(const string& prompt, int minV, int maxV) {
+    int value;
+    while (true) {
         cout << prompt;
-        getline(cin, value);
-
-        if (value.empty()) {
-            cout << "Ошибка: Поле не может быть пустым. Попробуйте снова.\n";
-            valid = false;
-            continue;
-        }
-
-        bool onlySpaces = true;
-        for (char c : value) {
-            if (c != ' ') {
-                onlySpaces = false;
-                break;
-            }
-        }
-
-        if (onlySpaces) {
-            cout << "Ошибка: Поле не может состоять только из пробелов. Попробуйте снова.\n";
-            valid = false;
-        }
-        else {
-            valid = true;
-        }
-    } while (!valid);
-
-    return value;
-}
-
-int getNumber(const string& prompt, int minVal, int maxVal) {
-    int num;
-    bool ok;
-
-    do {
-        cout << prompt;
-        cin >> num;
-
-        if (cin.fail()) {
+        cin >> value;
+        if (cin.fail() || value < minV || value > maxV) {
             cin.clear();
-            cin.ignore(10000, '\n');
-            cout << "Ошибка! Введите целое число.\n";
-            ok = false;
-        }
-        else if (num < minVal || num > maxVal) {
-            cout << "Ошибка! Значение должно быть от " << minVal
-                << " до " << maxVal << ".\n";
-            ok = false;
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            cout << "Ошибка! Введите число от " << minV << " до " << maxV << ".\n";
         }
         else {
-            ok = true;
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+            return value;
         }
-    } while (!ok);
-
-    cin.ignore(10000, '\n');
-    return num;
+    }
 }
 
-Patient inputPatient() {
-    Patient p;
-
-    cout << "\nВведите дату обращения (например 12.05.2024): ";
-    p.setDate(getString(""));
-
-    cout << "Введите ФИО пациента: ";
-    p.setFullName(getString(""));
-
-    cout << "Введите группу (кафедра, отдел): ";
-    p.setGroup(getString(""));
-
-    cout << "Введите причину обращения: ";
-    p.setReason(getString(""));
-
-    cout << "Пациент направлен в другое лечебное учреждение?\n";
-    cout << "1 - Да, 0 - Нет (оказана помощь на месте): ";
-    int choice = getNumber("", 0, 1);
-    p.setWasSentToHospital(choice == 1);
-
-    cout << "Введите примечание (можно пустое): ";
-    string note;
-    getline(cin, note);
-    p.setNote(note);
-
-    return p;
+string inputString(const string& prompt) {
+    string s;
+    while (true) {
+        cout << prompt;
+        getline(cin, s);
+        if (!s.empty()) return s;
+        cout << "Ошибка! Поле не может быть пустым.\n";
+    }
 }
 
-void printPatientsByDate(const vector<Patient>& patients, const string& date) {
-    cout << "Пациенты, обратившиеся " << date << ":\n";
+bool isValidDate(const string& date) {
+    if (date.size() != 10) return false;
+    if (date[2] != '.' || date[5] != '.') return false;
+    for (int i : {0, 1, 3, 4, 6, 7, 8, 9}) {
+        if (!isdigit(date[i])) return false;
+    }
+    int day = stoi(date.substr(0, 2));
+    int month = stoi(date.substr(3, 2));
+    int year = stoi(date.substr(6, 4));
+    return (day >= 1 && day <= 31 && month >= 1 && month <= 12 && year >= 1900);
+}
 
+void addPatient(vector<Patient>& patients) {
+    string date, fullName, group, reason, note;
+    bool helped;
+
+    while (true) {
+        date = inputString("Введите дату (дд.мм.гггг): ");
+        if (isValidDate(date)) break;
+        cout << "Ошибка! Неверный формат даты.\n";
+    }
+
+    fullName = inputString("Введите Ф.И.О. пациента: ");
+    group = inputString("Введите группу (кафедру/отдел): ");
+    reason = inputString("Введите причину обращения: ");
+
+    int h = inputInt("Помощь оказана? (1 - да, 0 - направлен): ", 0, 1);
+    helped = (h == 1);
+
+    note = inputString("Введите примечание: ");
+
+    Patient p(date, fullName, group, reason, helped, note);
+    patients.push_back(p);
+    cout << "Запись успешно добавлена.\n";
+}
+
+void printAll(const vector<Patient>& patients) {
+    if (patients.empty()) {
+        cout << "Список пуст.\n";
+        return;
+    }
+    cout << "\n" << string(120, '=') << endl;
+    cout << left
+        << setw(12) << "Дата"
+        << setw(25) << "Ф.И.О."
+        << setw(18) << "Группа"
+        << setw(25) << "Причина"
+        << setw(20) << "Статус"
+        << "Примечание" << endl;
+    cout << string(120, '-') << endl;
+    for (const auto& p : patients) {
+        p.print();
+    }
+    cout << string(120, '=') << endl;
+}
+
+void printByDate(const vector<Patient>& patients, const string& date) {
     bool found = false;
-    for (const Patient& p : patients) {
-        if (p.getDate() == date) {
-            p.print();
+    cout << "\nПациенты, обратившиеся " << date << ":\n";
+    cout << string(60, '-') << endl;
+    for (const auto& p : patients) {
+        if (p.matchesDate(date)) {
+            cout << p.getFullName() << " | " << p.getGroup()
+                << " | " << p.getReason() << endl;
             found = true;
         }
     }
-
-    if (!found) {
-        cout << "Пациентов с такой датой обращения не найдено.\n";
-    }
+    if (!found) cout << "  (нет таких пациентов)\n";
 }
 
-void printSentPatients(const vector<Patient>& patients) {
-    cout << "Пациенты, направленные в другое учреждение:\n";
-
+void printRedirected(const vector<Patient>& patients) {
     bool found = false;
-    for (const Patient& p : patients) {
-        if (p.wasSent()) {
-            p.print();
+    cout << "\nПациенты, направленные в другое лечебное учреждение:\n";
+    cout << string(60, '-') << endl;
+    for (const auto& p : patients) {
+        if (p.isRedirected()) {
+            cout << p.getDate() << " | " << p.getFullName()
+                << " | " << p.getGroup() << " | " << p.getNote() << endl;
             found = true;
         }
     }
-
-    if (!found) {
-        cout << "Нет пациентов, направленных в другое учреждение.\n";
-    }
+    if (!found) cout << "  (нет таких пациентов)\n";
 }
