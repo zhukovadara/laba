@@ -84,7 +84,7 @@ void inputEmployees(vector<Employee>& employees, int n) {
 }
 
 void printEmployees(const vector<Employee>& employees) {
-    cout << "\n--- Все сотрудники ---\n";
+    cout << "\n Все сотрудники \n";
     for (size_t i = 0; i < employees.size(); i++) {
         cout << "\nСотрудник " << i + 1 << "\n";
         cout << "  ФИО: " << employees[i].fio << "\n";
@@ -100,7 +100,7 @@ void printSameDisease(const vector<Employee>& employees) {
         groups[employees[i].disease].push_back(i);
     }
 
-    cout << "\n--- Одинаковые заболевания ---\n";
+    cout << "\n Одинаковые заболевания \n";
 
     bool found = false;
     for (auto& g : groups) {
