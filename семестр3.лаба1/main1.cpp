@@ -1,23 +1,21 @@
 #include "Header1.h"
+#include <iostream>
+#include <clocale>
 
 using namespace std;
 
 int main() {
     setlocale(LC_ALL, "Russian");
 
-    cout << "Программа учета заболеваний сотрудников\n";
+    cout << "Учёт заболеваний сотрудников\n\n";
 
-    int N = checkInt("Введите количество сотрудников (1-100): ", 1, 100);
+    int n = inputInt("Количество сотрудников (1-100): ", 1, 100);
 
     vector<Employee> employees;
-    
-    inputEmployees(employees, N);
+    inputEmployees(employees, n);
 
     printEmployees(employees);
-
-    printEmployeesDisease(employees);
-
-    cout << "\nПрограмма завершена.\n";
+    printSameDisease(employees);
 
     return 0;
 }
