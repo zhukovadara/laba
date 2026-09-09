@@ -24,7 +24,6 @@ public:
     Patient(const string& date, const string& fullName,
         const string& group, const string& reason,
         bool helped, const string& note);
-    Patient(const string& date, const string& fullName);
     Patient(const Patient& other);
     ~Patient();
 

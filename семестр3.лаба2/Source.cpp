@@ -12,11 +12,6 @@ Patient::Patient(const string& date, const string& fullName,
     reason(reason), helped(helped), note(note) {
 }
 
-Patient::Patient(const string& date, const string& fullName)
-    : date(date), fullName(fullName), group("Не указана"),
-    reason("Не указана"), helped(true), note("") {
-}
-
 Patient::Patient(const Patient& other)
     : date(other.date), fullName(other.fullName), group(other.group),
     reason(other.reason), helped(other.helped), note(other.note) {
