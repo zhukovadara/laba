@@ -21,9 +21,8 @@ double getDouble(const string& prompt, double minVal, double maxVal) {
             cout << "Ошибка! Введите число.\n";
             valid = false;
         }
-        else if (value < minVal || value > maxVal) {
+        else if (value < minVal) {
             cout << "Ошибка! Сторона должна быть больше " << minVal;
-            if (maxVal < 1e9) cout << " и меньше " << maxVal;
             cout << ".\n";
             valid = false;
         }
